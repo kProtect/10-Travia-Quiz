@@ -30,7 +30,7 @@ p {
 
 .container {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,6 +38,13 @@ p {
     margin: 0 auto;
     padding: 2rem;
 }
+
+.highscores-container #time {
+    float: right;
+    margin-top: 20px;
+
+}
+
 
 .flex-column {
     display: flex;
@@ -57,26 +64,43 @@ p {
     text-align: center;
 }
 
-.hidden {
-    display: none;
+
+#highscores-button .btn {
+    width: 20rem;
+    color: white;
 }
 
 .btn {
-    font-size: 4rem;
-    padding: 3rem 0;
+    font-size: 3rem;
     width: 15rem;
     text-align: center;
     margin-bottom: 1rem;
     text-decoration: none;
     color: rgb(28,26,26);
-    background:linear-gradient(90deg, rgb(18,93,255)0% , rgb(0,102,255) 100% );
+    background:linear-gradient(red,orange);
     border-radius: 4px;
     
 }
 
-.btn :hover {
+.btn:hover {
     cursor: pointer;
-    box-shadow: 0 0.4rem 1.4rem  0 rgb (255,255,0,0.5);
+    box-shadow: 5px 5px 5px 1px rgb(28,26,26);
     transition: transform 200ms;
-    transform: scale(1.5);
+    transform: scale(1.1);
+}
+
+#question {
+    width: 300px;
+    max-width: 50%;
+    color: white;
+    font-size: 2.5rem;
+}
+
+.btn-grid {
+    display: grid;
+    margin: 20px;
+}
+
+.hide {
+    display: none;
 }

@@ -5,28 +5,41 @@
     <title>10 Travia Quiz</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <link href="./style.css"  rel="stylesheet" />
+    <script src="./script.js"></script>
+
   </head>
 
   <body>
-    <a href="/highscore.html"
-     id="highscore-btn" 
-     class="btn">
-     Highscores
 
-    </a>
-
+    <div class="highscores-container">
+      <p id="time">Time:</p>
+      <div id="highscores-button">
+        <button class="btn">
+          Highscores
+        </button>
+      </div>
+    </div>
+      
+    </div>
+    
     <div class="container">
       <div id="home" class="flex-column flex-center">
         <h1>Do you want to try 10 Travia challenge???</h1>
         <p>This Travia challenge will test your common knowledge </p>
-        <a href="/game.html" class="btn">Start</a>
-        
+        <button class="btn">Start</button>
       </div>
     </div>
-        
 
-
+    <div id="question-container" class="hide">
+      <div id="question">Question</div>
+      <div id="answer-buttons" class="btn-grid">
+        <button class="btn">Ans1</button>
+        <button class="btn">Ans2</button>
+        <button class="btn">Ans3</button>
+        <button class="btn">Ans4</button>
+      </div>
+    </div>
 
     <script src="./script.js"></script>
 
