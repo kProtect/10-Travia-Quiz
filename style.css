@@ -11,68 +11,37 @@
     font-family: sans-serif;
 }
 
-h1 {
+h1,h2 {
+    width: 45vw;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0.5rem;
+}
+
+h1, #highscores, h2 {
     font-size: 5.5rem;
     color: white;
-    margin-bottom: 5rem;
+    margin-bottom: 1rem;
 }
 
 h2 {
-    font-size: 4.2rem;
-    margin-bottom: 4rem;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
 }
 
 p {
-    font-size: 2.5rem;
-    color: white;
-    margin-bottom: 4rem;
-}
-
-.container {
-    width: 100vw;
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 88rem;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.highscores-container #time {
-    float: right;
-    margin-top: 20px;
-
-}
-
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.flex-center {
-    justify-content: center;
-    align-items: center;
-}
-
-.justify-center {
-    justify-content: center;
-}
-
-.text-center {
-    text-align: center;
-}
-
-
-#highscores-button .btn {
-    width: 20rem;
-    color: white;
-}
-
-.btn {
     font-size: 3rem;
-    width: 15rem;
+    color: white;
+    margin-bottom: 1rem;
+    float: right;
+}
+
+button {
+    width: auto;
+    font-size: 3rem;
     text-align: center;
     margin-bottom: 1rem;
     text-decoration: none;
@@ -82,23 +51,11 @@ p {
     
 }
 
-.btn:hover {
+.btn:hover{
     cursor: pointer;
     box-shadow: 5px 5px 5px 1px rgb(28,26,26);
     transition: transform 200ms;
     transform: scale(1.1);
-}
-
-#question {
-    width: 300px;
-    max-width: 50%;
-    color: white;
-    font-size: 2.5rem;
-}
-
-.btn-grid {
-    display: grid;
-    margin: 20px;
 }
 
 .hide {

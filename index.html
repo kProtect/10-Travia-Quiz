@@ -5,46 +5,41 @@
     <title>10 Travia Quiz</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="./style.css"  rel="stylesheet" />
-    <script src="./script.js"></script>
-
+    <link rel="stylesheet" href="style.css">
   </head>
 
   <body>
-
-    <div class="highscores-container">
-      <p id="time">Time:</p>
-      <div id="highscores-button">
-        <button class="btn">
-          Highscores
+    <div id="App">
+      <header>
+        <button id="highscores" class="btn" data-states="[0,2]">
+          View Highscores
         </button>
-      </div>
-    </div>
-      
-    </div>
-    
-    <div class="container">
-      <div id="home" class="flex-column flex-center">
+        <p id="time" data-states="[0,1]">Time:</p>
+      </header>
+  
+      <main>     
+    <section id="start" data-states="[0]">
         <h1>Do you want to try 10 Travia challenge???</h1>
-        <p>This Travia challenge will test your common knowledge </p>
+        <h2>This Travia challenge will test your common knowledge <h2>
         <button class="btn">Start</button>
-      </div>
-    </div>
+    </section>
 
-    <div id="question-container" class="hide">
-      <div id="question">Question</div>
-      <div id="answer-buttons" class="btn-grid">
-        <button class="btn">Ans1</button>
-        <button class="btn">Ans2</button>
-        <button class="btn">Ans3</button>
-        <button class="btn">Ans4</button>
-      </div>
-    </div>
+    <section id="question-container" class="hide" data-states="[1]">
+      <h1>Question</h1>
+      <h2 id="question"></h2>
+      <ul id="answer"> </ul>
+      <button class="btn">Next</button>
+    </section>
+    <section id="screen2" class="hide" data-states="[2]"> 
+      <h1>HighScores</h1>
+      <button>Go to Home</button>
+    </section>
+  </main>
+  </div>
 
-    <script src="./script.js"></script>
+  <script src="./script.js"></script>
 
   </body>
-
 </html>
 
 
