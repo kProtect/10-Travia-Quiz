@@ -1,102 +1,138 @@
-var start = document.querySelector("#start")
-var startbtn = document.querySelector("button")
-var question = document.querySelector("#question-container")
-var nextbtn = document.querySelector("button")
-var highscores = document.querySelector("#highscores")
-var highbtn = document.querySelector("button")
-var viewhigh = document.querySelector("#view-highscroes")
-var time = document.querySelector("#time")
-var question = document.querySelector("#question")
-var answer = document.querySelector("#answer")
+const question = document.getElementById("question");
+const choices = Array.from(document.querySelector(".choice-text"));
+console.log(choices);
 
-var HIDE = "hide";
-var question = [
-{
-    question: "In which continent are Chile, Argentina and Brazil?",
-    answer: ["North America","South America", "Europe", "Australasia"],
-    answer: 1
-},
-{
-    question: "Which brand of soup featured in one of Andy Warhols most famous pop art pieces?",
-    answer: ["Heinz","Campbells", "Baxters", "Knorr"],
-    answer: 1
-},
-{
-    question: "The Mad Hatter and the Cheshire Cat are characters in which famous book?",
-    answer: ["Winne-the-Pooh", "Charlotte's Web", "Charlie and the Chocolate Factory",
-    "Alice in Wonderland"],
-    answer: 1
-},
-{
-    question: "What measurement scale is used to determine wind speed?",
-    answer: ["Beaufort scale", "Richter scale", "Synoptic scale", "Gusting scale"],
-    answer: 1
+let currentQuestion = {};
+let acceptingAnswers = true;
+let score = 0;
+let questionCounter = 0 ;
+let availableQuestion = [];
 
-},
-{
-    question: "In which city were the 1992 Summer Olympics held?",
-    answer: ["Atlanta", "Barcelona", "Sydney", "Seoul"],
-    answer: 1
-},
-{
-    question: "What other country, besides the US, uses the US dollar as its official currency?",
-    answer: ["Ecuador", "Canada", "Mexico", "United Kingdom"],
-    answer: 1
-},
-{
-    question: "How many sides does a Dodecahedron have??",
-    answer: ["12", "24", "14", "20"],
-    answer: 1
-},
-{
-    question: "The Statue of Liberty was a gift to the United States from which European country?",
-    answer: ["Belgium" ,  "Germany" ,  "Spain" ,  "France"],
-    answer: 1
-},
-{
-    question: "Which traditional Spanish dance originated in Andalusia and is recognised by UNESCO as a heritage of humanity?",
-    answer: ["Sardana",  "Tango", "Flamenco", "Paso Doble"],
-    answer: 1
-},
-{
-    question: "The human body is made up of approximately how much water?",
-    answer: ["40%", "50%", "60%", "70%"],
-    answer: 1
-},
+let questions = [
+    {
+        question: "In which continent are Chile, Argentina and Brazil?",
+        choice1: "<North America>",
+        choice2: "<South America>",
+        choice3: "<Europe>",
+        choice4: "<Australasia>",
+        answer: 2
+    },
+    {
+        question: "Which brand of soup featured in one of Andy Warhols most famous pop art pieces?",
+        choice1: "<Heinz>",
+        choice2: "<Campbells>",
+        choice3: "<Baxters>",
+        choice4: "<Knorr>",
+        answer: 2
+    },
+    {
+        question: "The Mad Hatter and the Cheshire Cat are characters in which famous book?",
+        choice1: "<Winne-the-Pooh>",
+        choice2: "<Charlotte's Web>",
+        choice3: "<Charlie and the Chocolate Factory>",
+        choice4: "<Alice in Wonderland>",
+        answer: 4
+    },
+    {
+        question: "What measurement scale is used to determine wind speed?",
+        choice1: "<Beaufort scale>",
+        choice2: "<Richter scale>",
+        choice3: "<Synoptic scale>", 
+        choice4: "<Gusting scale>",
+        answer: 1
+    
+    },
+    {
+        question: "In which city were the 1992 Summer Olympics held?",
+        choice1: "<Atlanta>",
+        choice2: "<Barcelona>", 
+        choice3: "<Sydney>",
+        choice4: "<Seoul>",
+        answer: 2
+    },
+    {
+        question: "What other country, besides the US, uses the US dollar as its official currency?",
+        choice1: "<Ecuador>",
+        choice2: "<Canada>", 
+        choice3:"<Mexico>", 
+        choice4:"<United Kingdom>",
+        answer: 1
+    },
+    {
+        question: "How many sides does a Dodecahedron have??",
+        choice1: "<12>",
+        choice2: "<24>",
+        choice3: "<14>",
+        choice4: "<20>",
+        answer: 1
+    },
+    {
+        question: "The Statue of Liberty was a gift to the United States from which European country?",
+        choice1: "<Belgium>" , 
+        choice2: "<Germany>" , 
+        choice3: "<Spain>" , 
+        choice4: "<France>",
+        answer: 4
+    },
+    {
+        question: "Which traditional Spanish dance originated in Andalusia and is recognised by UNESCO as a heritage of humanity?",
+        choice1: "<Sardana>",
+        choice2:  "<Tango>",
+        choice3: "<Flamenco>",
+        choice4: "<Paso Doble>",
+        answer: 3
+    },
+    {
+        question: "The human body is made up of approximately how much water?",
+        choice1: "<40%>",
+        choice2: "<50%>",
+        choice3: "<60%>",
+        choice4: "<70%>",
+        answer: 3
+    },
 ]
 
-var cureentQuestions = 0;
+const CORRECT_BONUS = 1;
+const MAX_QUESTION = 1;
 
-var All = [
-    start,
-    question,
-    highscores,
-    viewhigh,
-    time
-];
+startGame = () => {
+    questionCounter =0;
+    score = 0;
+    availableQuestion = [questions];
+    console.log(availableQuestion)
+    getNewQuestion();
+};
 
-function init() {
-    setEventListeners();
-}
+getNewQuestion = () => {
 
-function setState(state) {
-    switch (state) {
-    case 1:
-        populateQuestion();
-        break;
-        default:
-        break;
-    }
-}
+    questionCounter++;
+    const questionIndex = Math.floor(Math.random() * availableQuestion.length);
+        currentQuestion = availableQuestion[questionIndex];
+        question.innerText = currentQuestion.question;
 
-All.forEach(function (ele) {
-    var possibleStatesAttr = ele.getAttribute("data-states");
-    var possibleStates = JSON.parse(possibleStatesAttr);
-    if (possibleStates.incldues(state)) {
-        ele.classList.remove(HIDE);
-    } else {
-     ele.classList.add(HIDE);
-    }
+        choices.forEach (choice => {
+            const number = choice.dataset['number'];
+            choice.innerText = currentQuestion['choice' + number];
+        })
+        availableQuestion.splice(questionIndex, 1);
+
+        acceptingAnswers = true;
+};
+
+choices.forEach(choice => {
+    choices.addEventListener('click', e =>{
+        if(!acceptingAnswers) return;
+
+        acceptingAnswers = false;
+        const selectedChoice = e.target;
+        const selectedAnswer = selectedChoice.dataset["number"];
+        console.log(selectedAnswer);
+        getNewQuestion();
+    });
 });
+
+startGame();
+     
+
 
 
