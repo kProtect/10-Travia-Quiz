@@ -5,23 +5,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css">
+    <title>10 Trivia Quiz</title>
   </head>
 
   <body>
-    <div id="quiz">
-      <header>
-        <button id="view-highscores">
-          View Highscores
-        </button>
-        <p id="time">Time: 55s</p>
-      </header>
+    
+      <button id="view-highscores">View Highscores</button>             
+      <p id="time">Time:</p>
   
       <main> 
-            
+
         <section id="start">
-        <h1>Do you want to try 10 Travia challenge???</h1>
-        <h2>This Travia challenge will test your common knowledge <h2>
-        <button >Start</button> 
+          <h1>10 Trivia Quiz</h1>
+          <h2>Do You Want To Take Fun Trivia quiz??</h2>
+        <button>play</button>
         </section>
 
     <section id="question-container" class="hide">
@@ -32,14 +29,36 @@
         <button class="btn">Answer 3</button>
         <button class="btn">Answer 4</button>
       </div>
+      <h2 id="answer-check" class="correct-wrong hide"></h2>
     </section>
+    
 
-    <section id="highscores" class="hide"> 
-      <h1>HighScores</h1>
-      <button>Go to Home</button>
-    </section>
+    <section id="score-page" class="hide">
+      <form id="submit">
+      <h3 id="user-score"></h3>
+      <label id="enter-initial">Enter your initials:</label>
+      <input type="text" id="initials" maxlength="3" placeholder="Enter your initials" />
+      <button id="submit">Submit</button>
+      </form>
+      </section>
+     
+      <section id="highscores" class="highscores-container hide">
+      <div id="high-scores">
+      <h1 class=>Leaderboard</h1>
+      <div id="highscore" class="highscore highscore-list">
+      </div>
+      <div class="controls">
+      <button id="home">Home</button>
+      <button id="clear">Clear Scores</button>
+      </div>
+      </div>
+      
+      </section>
+     
+
+    
   </main>
-  </div>
+ 
 
   <script src="./script.js"></script>
 

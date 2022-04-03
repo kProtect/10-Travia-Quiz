@@ -3,69 +3,120 @@ const startButton = startEl.querySelector("button")
 const question = document.getElementById("question-container")
 const questionsEl = document.getElementById('question')
 const answerEl = document.getElementById("answer-button")
-
-let timeEl = document.querySelector("time")
-
+const checkans = document.getElementById("answer-check")
+const highscoreEl = document.getElementById("highscores")
+const viewhighBtn = document.getElementById("view-highscores")
+const homeBtn = document.getElementById("home")
+const submit = document.getElementById('submit')
+const scorepage = document.getElementById('score-page')
+const quizEl = document.getElementById('quiz')
+const timeEl = document.getElementById("time")
+const clearBtn = document.getElementById("clear")
 
 let shuffledQuestions, currentQuestionIndex
 
+const highscores = JSON.parse(localStorage.getItem("highScores")) || []
+console.log(highscores)
+
+viewhighBtn.addEventListener('click', () => {
+    startEl.classList.add('hide')
+    highscoreEl.classList.remove('hide')
+}) 
 
 startButton.addEventListener('click', startGame)
+
 answerEl.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
 
+homeBtn.addEventListener('click',() =>{
+    startEl.classList.remove('hide')
+    highscoreEl.classList.add('hide')
+}
+)
+
+var sec = 55;
+
+function timer() {
+    document.querySelector("#time").innerHTML = "Time: " +sec + " s";
+    sec--;
+    if (sec >= 0) {
+        clearInterval(timer)
+    }
+}   
+
 function startGame() {
     startEl.classList.add('hide')
-    shuffledQuestions = questions.sort(() => Math.random()- .5)
+    shuffledQuestions = questions.sort(() => Math.random()==0.5)
     currentQuestionIndex = 0
     question.classList.remove('hide')
+    timer()
     setNextQuestion()
+}
+
+function scoreEl(){
+    window.alert("Game Over!")
+    question.classList.add('hide')
 }
 
 
 function setNextQuestion() {
     resetState()
     showQuestion(shuffledQuestions[currentQuestionIndex])
+    
 }
+
 
 function showQuestion(question) {
     questionsEl.innerText = question.question
+    
     question.answers.forEach(answer => {
         const button = document.createElement('button')
         button.innerText = answer.text
         button.classList.add('btn')
         if (answer.correct){
         button.dataset.correct = answer.correct
-        }
+        } 
         button.addEventListener("click", selectAnswers)
         answerEl.appendChild(button)
     })
-}
+
+};
+
 
 function resetState() {
     clearStatusClass(document.body)
-    answerEl.classList.remove('hide')
+    questionsEl.classList.add('hide')
+    answerEl.classList.add('hide')
     while (answerEl.firstChild) {
-        answerEl.removeChild(answerEl.firstChild)
+        answerEl.removeChild
+        (answerEl.firstChild)
     }
 }
+
 
 function selectAnswers(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
+
+    answerEl.classList.remove("hide")
+
     setStatusClass(document.body, correct)
+
     Array.from(answerEl.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
     })
-    if(shuffledQuestions.length > currentQuestionIndex +1){
-        questionsEl.classList.remove('hide')
+    if(shuffledQuestions.length > currentQuestionIndex + 1){
+        answerEl.classList.remove("hide")
     } else {
-        startButton.innerText = 'Restart'
-        startButton.classList.remove('hide')
+        question.classList.add('hide')
+        scorepage.classList.remove('hide')
+        scoreEl();
     }
+   
 }
+
 
 function setStatusClass(element, correct){
     clearStatusClass(element)
@@ -80,6 +131,8 @@ function clearStatusClass(element){
      element.classList.remove('correct')
      element.classList.remove('wrong')
 }
+
+
 
 const questions = [
     {
