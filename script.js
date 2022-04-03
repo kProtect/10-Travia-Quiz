@@ -1,27 +1,23 @@
+const timeee = document.getElementById("time")
 const startEl = document.getElementById("start")
 const startButton = startEl.querySelector("button")
 const question = document.getElementById("question-container")
 const questionsEl = document.getElementById('question')
 const answerEl = document.getElementById("answer-button")
 const checkans = document.getElementById("answer-check")
-const highscoreEl = document.getElementById("highscores")
 const viewhighBtn = document.getElementById("view-highscores")
 const homeBtn = document.getElementById("home")
 const submit = document.getElementById('submit')
 const scorepage = document.getElementById('score-page')
-const quizEl = document.getElementById('quiz')
-const timeEl = document.getElementById("time")
 const clearBtn = document.getElementById("clear")
+var sec = 55;
+var timeEl;
+var scores = JSON.parse(localStorage.getItem("scores")) || [];
+
+
 
 let shuffledQuestions, currentQuestionIndex
 
-const highscores = JSON.parse(localStorage.getItem("highScores")) || []
-console.log(highscores)
-
-viewhighBtn.addEventListener('click', () => {
-    startEl.classList.add('hide')
-    highscoreEl.classList.remove('hide')
-}) 
 
 startButton.addEventListener('click', startGame)
 
@@ -30,29 +26,26 @@ answerEl.addEventListener('click', () => {
     setNextQuestion()
 })
 
-homeBtn.addEventListener('click',() =>{
-    startEl.classList.remove('hide')
-    highscoreEl.classList.add('hide')
-}
-)
 
-var sec = 55;
 
-function timer() {
-    document.querySelector("#time").innerHTML = "Time: " +sec + " s";
+function timeTick() {
     sec--;
-    if (sec >= 0) {
-        clearInterval(timer)
+    timeee.textContent = "Time: " + sec;
+    if (sec <= 0) {
+    SavedScore();
     }
-}   
+   }
 
 function startGame() {
+    timeEl=setInterval(sec,1000)
     startEl.classList.add('hide')
-    shuffledQuestions = questions.sort(() => Math.random()==0.5)
+    shuffledQuestions = questions.sort(() => Math.random()-0.5)
     currentQuestionIndex = 0
     question.classList.remove('hide')
-    timer()
+
+    timeTick()
     setNextQuestion()
+    
 }
 
 function scoreEl(){
@@ -60,30 +53,27 @@ function scoreEl(){
     question.classList.add('hide')
 }
 
-
 function setNextQuestion() {
     resetState()
     showQuestion(shuffledQuestions[currentQuestionIndex])
     
 }
 
-
 function showQuestion(question) {
     questionsEl.innerText = question.question
     
     question.answers.forEach(answer => {
-        const button = document.createElement('button')
-        button.innerText = answer.text
-        button.classList.add('btn')
-        if (answer.correct){
-        button.dataset.correct = answer.correct
-        } 
-        button.addEventListener("click", selectAnswers)
-        answerEl.appendChild(button)
+    const button = document.createElement('button')
+    button.innerText = answer.text
+    button.classList.add('btn')
+    if (answer.correct){
+    button.dataset.correct = answer.correct
+    } 
+    button.addEventListener("click", selectAnswers)
+    answerEl.appendChild(button)
     })
 
 };
-
 
 function resetState() {
     clearStatusClass(document.body)
@@ -95,26 +85,35 @@ function resetState() {
     }
 }
 
-
 function selectAnswers(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
 
     answerEl.classList.remove("hide")
 
-    setStatusClass(document.body, correct)
+    if(correct) {
+        alert("CORRECT")
+    } else {
+        alert("WRONG")
+        if (sec <= 5){
+            sec = 0;
+        } else {
+            sec -=3;
+        }
+    }
+
 
     Array.from(answerEl.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
     })
+
     if(shuffledQuestions.length > currentQuestionIndex + 1){
         answerEl.classList.remove("hide")
     } else {
         question.classList.add('hide')
         scorepage.classList.remove('hide')
-        scoreEl();
     }
-   
+   SavedScore()
 }
 
 
@@ -131,6 +130,86 @@ function clearStatusClass(element){
      element.classList.remove('correct')
      element.classList.remove('wrong')
 }
+
+function SavedScore() {
+    clearInterval(timeEl)
+    document.querySelector("#time").innerHTML = "Time: " + sec ;
+    setTimeout(function () {
+        question.classList.add("hide")
+        document.getElementById("score-page").classList.remove("hide")
+        document.getElementById("user-score").textContent="User Score is " + sec;
+    },1500)
+}
+
+
+
+var loadScores = function () {
+
+    if(!SavedScore) {
+        return false;
+    }
+
+    SavedScore = JSON.parse(SavedScore)
+    var initial = document.querySelector("#initials").value
+    var newScores = {
+        scores: sec,
+        initial: initial
+    }
+    SavedScore.push(newScores)
+    console.log(SavedScore)
+
+    SavedScore.forEach(score => {
+        initialField.innerText = score.initial
+        scoresField.innerText = score.score
+    })
+}
+
+function showHigh(initial) {
+    document.getElementById("highscores-page").classList.remove("hide")
+    document.getElementById("score-page").classList.add("hide");
+    startEl.classList.add("hide");
+    questionsEl.classList.remove("hide");
+    if (typeof initial == "string") {
+    var score = {
+    initial, sec
+    }
+    score.push(scores)
+    }
+    var highScoreEl = document.getElementById("highscore");
+    highScoreEl.innerHTML = "";
+    for (i = 0; i < score.length; i++) {
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "name-div");
+    div1.innerText = score[i].initials;
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "score-div");
+    div2.innerText = score[i].timeLeft;
+   
+    highScoreEl.appendChild(div1);
+    highScoreEl.appendChild(div2);
+    }
+   
+    localStorage.setItem("scores", JSON.stringify(score));
+   
+   };
+
+
+viewhighBtn.addEventListener("click", showHigh);
+
+submit.addEventListener("click", function(event) {
+    event.preventDefault()
+    var initial = document.querySelector("#initials").value;
+    showHigh(initial);
+});
+
+homeBtn.addEventListener('click' ,function() {
+    window.location.reload()
+})
+
+clearBtn.addEventListener("click", function () {
+    localStorage.clear();
+    document.getElementById("highscore").innerHTML = "";
+   });
 
 
 
