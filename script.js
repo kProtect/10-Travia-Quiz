@@ -10,22 +10,15 @@ var homeBtn = document.getElementById("home")
 var submit = document.getElementById('submit')
 var scorepage = document.getElementById('score-page')
 var clearBtn = document.getElementById("clear")
-const username = document.getElementById("initials")
+var inputscore = document.getElementById("initials")
 var sec = 55;
 var timeEl;
-var scores = JSON.parse(localStorage.getItem("scores")) || [];
-
-username.addEventListener("keyup", () => {
-    console.log(username.value)
-    submit.disabled= !username.value
-})
-
-saveHighScore = e => {
-    console.log("clicked the save button")
-    e.preventDefault()
-}
 
 let shuffledQuestions, currentQuestionIndex
+
+viewhighBtn.addEventListener('click', () => {
+    
+})
 
 
 startButton.addEventListener('click', startGame)
@@ -72,9 +65,24 @@ function setNextQuestion() {
     
 }
 
+function storeScroe(event) {
+    event.preventDefault();
+
+    if(!inputscore.value) {
+        alert("enter initials before submit")
+        return;
+    }
+
+    let leaderboard = {
+        initials: inputscore.value,
+        score: sec
+    };
+
+    updateStroedLeader
+}
+
 function showQuestion(question) {
     questionsEl.innerText = question.question
-    
     question.answers.forEach(answer => {
     const button = document.createElement('button')
     button.innerText = answer.text
