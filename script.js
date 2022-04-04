@@ -1,3 +1,4 @@
+//All the elements 
 var timeee = document.getElementById("time")
 var startEl = document.getElementById("start")
 var startButton = startEl.querySelector("button")
@@ -7,64 +8,72 @@ var answerEl = document.getElementById("answer-button")
 var checkans = document.getElementById("answer-check")
 var viewhighBtn = document.getElementById("view-highscores")
 var homeBtn = document.getElementById("home")
+var highscorepage = document.getElementById("highscores-page")
 var submit = document.getElementById('submit')
 var scorepage = document.getElementById('score-page')
 var clearBtn = document.getElementById("clear")
 var inputscore = document.getElementById("initials")
+
 var sec = 55;
 var timeEl;
 
 let shuffledQuestions, currentQuestionIndex
 
-viewhighBtn.addEventListener('click', () => {
-    
+//view highbtn
+viewhighBtn.addEventListener("click", showHigh);
+
+//go to home button
+homeBtn.addEventListener('click', () => {
+    window.location.reload();
 })
 
-
+//start button
 startButton.addEventListener('click', startGame)
 
+//click button 
 answerEl.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
 
-function timer(){
-    var timers = setInterval(function(){
+//timers for quiz time
+function timers(){
+    var timer = setInterval(function(){
         document.getElementById('time').innerHTML='Time: '+sec+" s";
         sec--;
-        if (sec === 0) {
-            clearInterval()
+        if (sec <= 0) {
             saveScore()
-            scoreEl()
+            clearInterval(timer)
         }
-    }, 1000);
+    },1000);
 }
 
 
-
+// function starts the game
 function startGame() {
     startEl.classList.add('hide')
     shuffledQuestions = questions.sort(() => Math.random()-0.5)
     currentQuestionIndex = 0
     question.classList.remove('hide')
-    timer()
+    timers()
     setNextQuestion()
-    
 }
 
+// gives score page
 function scoreEl(){
     window.alert("Game Over!")
     question.classList.add('hide')
     saveScore()
-    clearInterval(sec)
 }
 
+
+//set next question
 function setNextQuestion() {
     resetState()
     showQuestion(shuffledQuestions[currentQuestionIndex])
-    
 }
 
+//storing score
 function storeScroe(event) {
     event.preventDefault();
 
@@ -77,10 +86,10 @@ function storeScroe(event) {
         initials: inputscore.value,
         score: sec
     };
-
     updateStroedLeader
-}
 
+}
+// showing question after click 
 function showQuestion(question) {
     questionsEl.innerText = question.question
     question.answers.forEach(answer => {
@@ -95,6 +104,7 @@ function showQuestion(question) {
     })
 };
 
+//reseting status
 function resetState() {
     clearStatusClass(document.body)
     questionsEl.classList.add('hide')
@@ -104,7 +114,7 @@ function resetState() {
         (answerEl.firstChild)
     }
 }
-
+//selecitn answers, give user correct or wrong answer
 function selectAnswers(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
@@ -114,16 +124,13 @@ function selectAnswers(e) {
     if(correct) {
         alert("CORRECT")
     } else {
-        alert("WRONG")
+        alert("WRONG -5")
         if (sec <= 10){
             sec = 0;
         } else {
             sec -= 5;
         }
     }
-    clearInterval(timer)
-
-
     Array.from(answerEl.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
     })
@@ -138,7 +145,7 @@ function selectAnswers(e) {
    
 }
 
-
+// setting the status class
 function setStatusClass(element, correct){
     clearStatusClass(element)
     if (correct) {
@@ -148,13 +155,79 @@ function setStatusClass(element, correct){
     }
 }
 
+
+// savescore
+function saveScore() {
+    clearInterval(timer);
+    sec.textContent = "Time: " + sec;
+    setTimeout(function () {
+    localStorage.setItem("scores", JSON.stringify(scores));
+    question.classList.add("hide");
+    document.getElementById("score-page").classList.remove("hide");
+    document.getElementById("user-score").textContent = "User Score is " + sec;
+    }, 1500)
+   };
+
+// clearing status
 function clearStatusClass(element){
      element.classList.remove('correct')
      element.classList.remove('wrong')
 }
 
+//loading scores
+var loadScores = function () {   
+    if (!saveScore) {
+    return false;
+    }
+   
+    // Convert scores from stringfield format into array
+    saveScore = JSON.parse(saveScore);
+    var initials = document.querySelector("#initials").value;
+    var newScore = {
+    score: sec,
+    initials: initials
+    }
+    saveScore.push(newScore);
+   
+    saveScore.forEach(score => {
+    initialsField.innerText = score.initials
+    scoreField.innerText = score.score
+    })
+   };
+// give user highscore
+ function showHigh(initial) {
+    document.getElementById("highscores-page").classList.remove("hide")
+    document.getElementById("score-page").classList.add("hide");
+    startEl.classList.add("hide");
+    question.classList.add("hide");
+    if (typeof initial == "string") {
+    var score = {
+    initial, timeLeft
+    }
+    scores.push(score)
+    }
+   
+    var highScoreEl = document.getElementById("highscore");
+    highScoreEl.innerHTML = "";
+   
+    for (i = 0; i < score.length; i++) {
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "name-div");
+    div1.innerText = scores[i].initials;
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "score-div");
+    div2.innerText = scores[i].timeLeft;
+   
+    highScoreEl.appendChild(div1);
+    highScoreEl.appendChild(div2);
+    }
+   
+    localStorage.setItem("scores", JSON.stringify(scores));
+   
+   };
+   
 
-
+// question element
 const questions = [
     {
         question: "In which continent are Chile, Argentina and Brazil?",
