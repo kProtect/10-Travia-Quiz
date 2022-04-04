@@ -14,7 +14,7 @@ var scorepage = document.getElementById('score-page')
 var clearBtn = document.getElementById("clear")
 var inputscore = document.getElementById("initials")
 
-var sec = 55;
+
 var timeEl;
 
 let shuffledQuestions, currentQuestionIndex
@@ -35,14 +35,14 @@ answerEl.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
-
+var sec = 55;
 //timers for quiz time
 function timers(){
+
     var timer = setInterval(function(){
         document.getElementById('time').innerHTML='Time: '+sec+" s";
         sec--;
-        if (sec <= 0) {
-            saveScore()
+        if (sec < 1) {
             clearInterval(timer)
         }
     },1000);
@@ -55,15 +55,15 @@ function startGame() {
     shuffledQuestions = questions.sort(() => Math.random()-0.5)
     currentQuestionIndex = 0
     question.classList.remove('hide')
-    timers()
     setNextQuestion()
+    timers()
 }
 
 // gives score page
 function scoreEl(){
     window.alert("Game Over!")
     question.classList.add('hide')
-    saveScore()
+    clearInterval(timer)
 }
 
 
@@ -71,24 +71,9 @@ function scoreEl(){
 function setNextQuestion() {
     resetState()
     showQuestion(shuffledQuestions[currentQuestionIndex])
+    clearInterval(timers)
 }
 
-//storing score
-function storeScroe(event) {
-    event.preventDefault();
-
-    if(!inputscore.value) {
-        alert("enter initials before submit")
-        return;
-    }
-
-    let leaderboard = {
-        initials: inputscore.value,
-        score: sec
-    };
-    updateStroedLeader
-
-}
 // showing question after click 
 function showQuestion(question) {
     questionsEl.innerText = question.question
@@ -102,6 +87,7 @@ function showQuestion(question) {
     button.addEventListener("click", selectAnswers)
     answerEl.appendChild(button)
     })
+    
 };
 
 //reseting status
@@ -127,6 +113,7 @@ function selectAnswers(e) {
         alert("WRONG -5")
         if (sec <= 10){
             sec = 0;
+            scoreEl()
         } else {
             sec -= 5;
         }
@@ -140,9 +127,9 @@ function selectAnswers(e) {
     } else {
         question.classList.add('hide')
         scorepage.classList.remove('hide')
-        saveScore()
+        scoreEl()
+        clearInterval(sec)
     }
-   
 }
 
 // setting the status class
@@ -158,10 +145,10 @@ function setStatusClass(element, correct){
 
 // savescore
 function saveScore() {
-    clearInterval(timer);
+    clearInterval(sec);
     sec.textContent = "Time: " + sec;
     setTimeout(function () {
-    localStorage.setItem("scores", JSON.stringify(scores));
+    localStorage.setItem("score", JSON.stringify(score));
     question.classList.add("hide");
     document.getElementById("score-page").classList.remove("hide");
     document.getElementById("user-score").textContent = "User Score is " + sec;
@@ -179,8 +166,7 @@ var loadScores = function () {
     if (!saveScore) {
     return false;
     }
-   
-    // Convert scores from stringfield format into array
+ // Convert scores from stringfield format into array
     saveScore = JSON.parse(saveScore);
     var initials = document.querySelector("#initials").value;
     var newScore = {
@@ -194,6 +180,7 @@ var loadScores = function () {
     scoreField.innerText = score.score
     })
    };
+
 // give user highscore
  function showHigh(initial) {
     document.getElementById("highscores-page").classList.remove("hide")
@@ -202,9 +189,9 @@ var loadScores = function () {
     question.classList.add("hide");
     if (typeof initial == "string") {
     var score = {
-    initial, timeLeft
+    initial, sec
     }
-    scores.push(score)
+    score.push(score)
     }
    
     var highScoreEl = document.getElementById("highscore");
@@ -213,16 +200,16 @@ var loadScores = function () {
     for (i = 0; i < score.length; i++) {
     var div1 = document.createElement("div");
     div1.setAttribute("class", "name-div");
-    div1.innerText = scores[i].initials;
+    div1.innerText = score[i].initials;
     var div2 = document.createElement("div");
     div2.setAttribute("class", "score-div");
-    div2.innerText = scores[i].timeLeft;
+    div2.innerText = score[i].timeLeft;
    
     highScoreEl.appendChild(div1);
     highScoreEl.appendChild(div2);
     }
    
-    localStorage.setItem("scores", JSON.stringify(scores));
+    localStorage.setItem("scores", JSON.stringify(score));
    
    };
    
